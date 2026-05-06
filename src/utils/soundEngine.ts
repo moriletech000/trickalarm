@@ -1,5 +1,3 @@
-import { backgroundAudio } from './backgroundAudio';
-
 type SoundType = 'beep' | 'buzz' | 'bell';
 
 class SoundEngine {
@@ -8,7 +6,6 @@ class SoundEngine {
   private gainNode: GainNode | null = null;
   private isPlaying = false;
   private intervalId: number | null = null;
-  private currentSoundType: SoundType = 'beep';
 
   private initAudioContext() {
     if (!this.audioContext) {
@@ -16,23 +13,14 @@ class SoundEngine {
     }
   }
 
-  async start(soundType: SoundType = 'beep') {
+  start(soundType: SoundType = 'beep') {
     if (this.isPlaying) {
       this.stop();
     }
 
     this.initAudioContext();
     this.isPlaying = true;
-    this.currentSoundType = soundType;
 
-    // Start background audio for persistence
-    try {
-      await backgroundAudio.startAlarm(soundType);
-    } catch (error) {
-      console.log('Background audio failed, using fallback:', error);
-    }
-
-    // Start foreground audio as well
     if (soundType === 'beep') {
       this.playBeep();
     } else if (soundType === 'buzz') {
@@ -129,9 +117,6 @@ class SoundEngine {
   stop() {
     this.isPlaying = false;
 
-    // Stop background audio
-    backgroundAudio.stopAlarm();
-
     if (this.intervalId !== null) {
       clearInterval(this.intervalId);
       this.intervalId = null;
@@ -154,17 +139,7 @@ class SoundEngine {
   }
 
   isCurrentlyPlaying() {
-    return this.isPlaying || backgroundAudio.isAlarmPlaying();
-  }
-
-  // Get detailed status for debugging
-  getStatus() {
-    return {
-      foregroundPlaying: this.isPlaying,
-      backgroundPlaying: backgroundAudio.isAlarmPlaying(),
-      audioState: backgroundAudio.getAudioState(),
-      soundType: this.currentSoundType
-    };
+    return this.isPlaying;
   }
 }
 
