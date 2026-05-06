@@ -76,8 +76,32 @@ function App() {
       });
     }
 
-    // Register service worker for PWA functionality
+    // Register enhanced service worker for alarm persistence
     if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/alarm-worker.js')
+        .then(registration => {
+          console.log('Alarm Service Worker registered:', registration);
+        })
+        .catch(error => {
+          console.error('Alarm Service Worker registration failed:', error);
+        });
+
+      // Listen for service worker messages
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'REDIRECT_TO_ALARM') {
+          // Service worker requesting redirect to alarm page
+          if (window.location.pathname !== '/alarm') {
+            window.location.href = '/alarm';
+          }
+        } else if (event.data && event.data.type === 'FORCE_ALARM_PAGE') {
+          // Force navigation to alarm page
+          const { setActiveAlarm } = useAppStore.getState();
+          setActiveAlarm(event.data.alarm);
+          window.location.href = '/alarm';
+        }
+      });
+
+      // Register PWA service worker as well
       navigator.serviceWorker.getRegistrations().then(registrations => {
         console.log('Service Worker registrations:', registrations.length);
       });

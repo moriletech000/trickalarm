@@ -52,6 +52,14 @@ export function checkAlarms() {
     
     setActiveAlarm(resetAlarm);
 
+    // Notify service worker about active alarm
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'ALARM_ACTIVE',
+        alarm: resetAlarm
+      });
+    }
+
     // Mobile-specific alarm handling
     mobileAlarmHelper.requestWakeLock();
     mobileAlarmHelper.vibrate([500, 200, 500, 200, 500]);
@@ -165,4 +173,11 @@ export function resetLastTriggeredAlarm() {
   lastTriggeredAlarmId = null;
   lastTriggeredTime = 0;
   mobileAlarmHelper.releaseWakeLock();
+  
+  // Notify service worker that alarm is dismissed
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: 'ALARM_DISMISSED'
+    });
+  }
 }

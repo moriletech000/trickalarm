@@ -5,6 +5,7 @@ import { useAppStore } from '../store/appStore';
 import { soundEngine } from '../utils/soundEngine';
 import { AlarmClock, Camera, Moon } from 'lucide-react';
 import { getObjectIcon } from '../utils/objectIcons';
+import KioskModeHelper from '../components/KioskModeHelper';
 
 export default function AlarmFiring() {
   const navigate = useNavigate();
@@ -19,27 +20,92 @@ export default function AlarmFiring() {
     // Start playing the alarm sound
     soundEngine.start(activeAlarm.sound);
 
-    // Prevent navigation away from alarm page
+    // Enhanced tab protection - prevent closing/navigation
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      e.returnValue = '';
+      e.returnValue = '🚨 ALARM IS RINGING! Are you sure you want to close? The alarm will stop!';
+      return e.returnValue;
     };
 
-    // Prevent back button
+    // Prevent back button navigation
     const handlePopState = (e: PopStateEvent) => {
       e.preventDefault();
       window.history.pushState(null, '', '/alarm');
+      // Show warning if user tries to navigate away
+      if (!confirm('🚨 ALARM IS RINGING! Going back will stop the alarm. Are you sure?')) {
+        return;
+      }
     };
 
+    // Prevent keyboard shortcuts (Ctrl+W, Alt+F4, etc.)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent Ctrl+W (close tab)
+      if (e.ctrlKey && e.key === 'w') {
+        e.preventDefault();
+        alert('🚨 Cannot close tab while alarm is ringing! Dismiss the alarm first.');
+        return false;
+      }
+      
+      // Prevent Alt+F4 (close window)
+      if (e.altKey && e.key === 'F4') {
+        e.preventDefault();
+        alert('🚨 Cannot close window while alarm is ringing! Dismiss the alarm first.');
+        return false;
+      }
+      
+      // Prevent Ctrl+Shift+W (close window)
+      if (e.ctrlKey && e.shiftKey && e.key === 'W') {
+        e.preventDefault();
+        alert('🚨 Cannot close window while alarm is ringing! Dismiss the alarm first.');
+        return false;
+      }
+
+      // Prevent F5/Ctrl+R (refresh)
+      if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+        e.preventDefault();
+        alert('🚨 Cannot refresh while alarm is ringing! Dismiss the alarm first.');
+        return false;
+      }
+
+      // Prevent Escape key
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        alert('🚨 Cannot escape the alarm! Find the challenge object to dismiss.');
+        return false;
+      }
+    };
+
+    // Prevent right-click context menu
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      alert('🚨 Right-click disabled during alarm! Dismiss the alarm first.');
+      return false;
+    };
+
+    // Add all event listeners
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('popstate', handlePopState);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('contextmenu', handleContextMenu);
     
     // Push current state to prevent back navigation
     window.history.pushState(null, '', '/alarm');
 
+    // Focus trap - keep focus on alarm page
+    const focusTrap = () => {
+      if (document.activeElement?.tagName === 'IFRAME') {
+        (document.querySelector('button') as HTMLElement)?.focus();
+      }
+    };
+    
+    const focusInterval = setInterval(focusTrap, 1000);
+
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('popstate', handlePopState);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('contextmenu', handleContextMenu);
+      clearInterval(focusInterval);
     };
   }, [activeAlarm, navigate]);
 
@@ -71,12 +137,82 @@ export default function AlarmFiring() {
 
   const ObjectIcon = getObjectIcon(activeAlarm.challengeObject);
 
+  // Request fullscreen when alarm fires
+  useEffect(() => {
+    // Change page title to show alarm status
+    const originalTitle = document.title;
+    let titleFlash = true;
+    
+    const titleInterval = setInterval(() => {
+      document.title = titleFlash 
+        ? '🚨 ALARM RINGING - DO NOT CLOSE! 🚨' 
+        : '⚠️ TRICKALARM ACTIVE ⚠️';
+      titleFlash = !titleFlash;
+    }, 1000);
+
+    const requestFullscreen = async () => {
+      try {
+        if (document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+        } else if ((document.documentElement as any).webkitRequestFullscreen) {
+          await (document.documentElement as any).webkitRequestFullscreen();
+        } else if ((document.documentElement as any).msRequestFullscreen) {
+          await (document.documentElement as any).msRequestFullscreen();
+        }
+      } catch (error) {
+        console.log('Fullscreen request failed:', error);
+      }
+    };
+
+    // Request fullscreen after a short delay
+    const fullscreenTimer = setTimeout(requestFullscreen, 1000);
+
+    // Prevent exiting fullscreen
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement && activeAlarm) {
+        // If user exits fullscreen, show warning and try to re-enter
+        setTimeout(() => {
+          if (activeAlarm && !document.fullscreenElement) {
+            alert('🚨 Fullscreen mode helps prevent accidental alarm dismissal!');
+            requestFullscreen();
+          }
+        }, 500);
+      }
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+    return () => {
+      clearTimeout(fullscreenTimer);
+      clearInterval(titleInterval);
+      document.title = originalTitle;
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      
+      // Exit fullscreen when alarm is dismissed
+      if (document.fullscreenElement) {
+        document.exitFullscreen?.();
+      }
+    };
+  }, [activeAlarm]);
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-black">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-black relative overflow-hidden">
+      {/* Pulsing border warning */}
+      <div className="fixed inset-0 border-8 border-red-500 animate-pulse pointer-events-none z-50"></div>
+      
+      {/* Warning overlay */}
+      <div className="fixed top-4 left-4 right-4 z-40 bg-red-600 text-white p-3 rounded-lg border-2 border-red-400 animate-pulse">
+        <div className="text-center font-bold text-sm">
+          🚨 ALARM ACTIVE - DO NOT CLOSE BROWSER TAB 🚨
+        </div>
+      </div>
+
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="text-center max-w-lg"
+        className="text-center max-w-lg relative z-10"
       >
         {/* Alarm Icon */}
         <motion.div
@@ -137,6 +273,9 @@ export default function AlarmFiring() {
             : `Snooze 5 min (${2 - activeAlarm.snoozeCount} left)`}
         </button>
       </motion.div>
+
+      {/* Kiosk Mode Helper */}
+      <KioskModeHelper isAlarmActive={!!activeAlarm} />
     </div>
   );
 }
