@@ -88,16 +88,11 @@ function App() {
 
       // Listen for service worker messages
       navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'REDIRECT_TO_ALARM') {
-          // Service worker requesting redirect to alarm page
+        if (event.data && event.data.type === 'NAVIGATE_TO_ALARM') {
+          // Service worker requesting navigation to alarm page
           if (window.location.pathname !== '/alarm') {
             window.location.href = '/alarm';
           }
-        } else if (event.data && event.data.type === 'FORCE_ALARM_PAGE') {
-          // Force navigation to alarm page
-          const { setActiveAlarm } = useAppStore.getState();
-          setActiveAlarm(event.data.alarm);
-          window.location.href = '/alarm';
         }
       });
 
@@ -134,8 +129,8 @@ function App() {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         // Page became visible, schedule immediate alarm check
-        setTimeout(() => {
-          const { checkAlarms } = require('./utils/alarmScheduler');
+        setTimeout(async () => {
+          const { checkAlarms } = await import('./utils/alarmScheduler');
           checkAlarms();
         }, 1000);
       }
