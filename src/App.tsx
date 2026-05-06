@@ -8,6 +8,7 @@ import Scanner from './pages/Scanner';
 import { useAppStore } from './store/appStore';
 import { loadTensorFlowModel } from './utils/tensorflowLoader';
 import { startAlarmScheduler, stopAlarmScheduler } from './utils/alarmScheduler';
+import { backgroundAudio } from './utils/backgroundAudio';
 import LoadingScreen from './components/LoadingScreen';
 
 function App() {
@@ -76,14 +77,29 @@ function App() {
       });
     }
 
+    // Initialize background audio system
+    const initBackgroundAudio = async () => {
+      try {
+        await backgroundAudio.initializeAudio();
+        console.log('Background audio system initialized');
+      } catch (error) {
+        console.log('Background audio initialization failed:', error);
+      }
+    };
+
     // Register enhanced service worker for alarm persistence
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/alarm-worker.js')
         .then(registration => {
-          console.log('Alarm Service Worker registered:', registration);
+          console.log('Enhanced Alarm Service Worker registered:', registration);
+          
+          // Initialize background audio after service worker is ready
+          initBackgroundAudio();
         })
         .catch(error => {
-          console.error('Alarm Service Worker registration failed:', error);
+          console.error('Enhanced Alarm Service Worker registration failed:', error);
+          // Still try to initialize background audio
+          initBackgroundAudio();
         });
 
       // Listen for service worker messages
@@ -98,6 +114,19 @@ function App() {
           const { setActiveAlarm } = useAppStore.getState();
           setActiveAlarm(event.data.alarm);
           window.location.href = '/alarm';
+        } else if (event.data && event.data.type === 'ALARM_KEEP_ALIVE') {
+          // Service worker keeping alarm alive
+          const { activeAlarm, setActiveAlarm } = useAppStore.getState();
+          if (!activeAlarm && event.data.alarm) {
+            setActiveAlarm(event.data.alarm);
+            if (window.location.pathname !== '/alarm') {
+              window.location.href = '/alarm';
+            }
+          }
+        } else if (event.data && event.data.type === 'SNOOZE_ALARM') {
+          // Handle snooze from notification
+          const { snoozeActiveAlarm } = useAppStore.getState();
+          snoozeActiveAlarm();
         }
       });
 
@@ -105,6 +134,9 @@ function App() {
       navigator.serviceWorker.getRegistrations().then(registrations => {
         console.log('Service Worker registrations:', registrations.length);
       });
+    } else {
+      // No service worker support, still initialize background audio
+      initBackgroundAudio();
     }
 
     // Prevent mobile browser from sleeping
@@ -134,8 +166,8 @@ function App() {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         // Page became visible, schedule immediate alarm check
-        setTimeout(() => {
-          const { checkAlarms } = require('./utils/alarmScheduler');
+        setTimeout(async () => {
+          const { checkAlarms } = await import('./utils/alarmScheduler');
           checkAlarms();
         }, 1000);
       }
