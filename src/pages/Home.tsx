@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Edit2, Trash2, AlarmClock } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 import { getObjectIcon } from '../utils/objectIcons';
+import MobileAlarmTips from '../components/MobileAlarmTips';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -142,6 +143,9 @@ export default function Home() {
       >
         <Plus size={32} strokeWidth={3} />
       </motion.button>
+
+      {/* Mobile Tips */}
+      <MobileAlarmTips />
     </motion.div>
   );
 }

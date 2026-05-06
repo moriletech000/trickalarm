@@ -7,7 +7,7 @@ import AlarmFiring from './pages/AlarmFiring';
 import Scanner from './pages/Scanner';
 import { useAppStore } from './store/appStore';
 import { loadTensorFlowModel } from './utils/tensorflowLoader';
-import { checkAlarms } from './utils/alarmScheduler';
+import { startAlarmScheduler, stopAlarmScheduler } from './utils/alarmScheduler';
 import LoadingScreen from './components/LoadingScreen';
 
 function App() {
@@ -60,25 +60,69 @@ function App() {
   useEffect(() => {
     if (!modelLoaded) return;
 
-    // Initial check
-    checkAlarms();
-    
-    // Check every 30 seconds
-    const interval = setInterval(() => {
-      // Only check if we're not already on the alarm or scan page
-      const currentPath = window.location.pathname;
-      if (currentPath !== '/alarm' && currentPath !== '/scan') {
-        checkAlarms();
-      }
-    }, 30000);
+    // Start the enhanced alarm scheduler
+    startAlarmScheduler();
 
-    return () => clearInterval(interval);
+    return () => {
+      stopAlarmScheduler();
+    };
   }, [modelLoaded]);
 
   useEffect(() => {
+    // Request notification permission immediately
     if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
+      Notification.requestPermission().then(permission => {
+        console.log('Notification permission:', permission);
+      });
     }
+
+    // Register service worker for PWA functionality
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        console.log('Service Worker registrations:', registrations.length);
+      });
+    }
+
+    // Prevent mobile browser from sleeping
+    const preventSleep = () => {
+      // Keep a small audio context active to prevent sleep
+      if ('AudioContext' in window || 'webkitAudioContext' in window) {
+        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        const audioContext = new AudioContext();
+        
+        // Create a silent oscillator to keep audio context active
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.01);
+      }
+    };
+
+    // Run prevent sleep every 30 seconds
+    const sleepPrevention = setInterval(preventSleep, 30000);
+
+    // Handle page visibility changes (mobile app switching)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Page became visible, schedule immediate alarm check
+        setTimeout(() => {
+          const { checkAlarms } = require('./utils/alarmScheduler');
+          checkAlarms();
+        }, 1000);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(sleepPrevention);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const handleSkip = () => {
