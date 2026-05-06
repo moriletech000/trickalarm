@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #000000;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  background: #000000;
+}
+
+/* Remove all hover animations */
+button {
+  cursor: pointer;
+  transition: none;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Animations */
+@keyframes pulse-alarm {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.pulse-alarm {
+  animation: pulse-alarm 1.5s ease-in-out infinite;
+}
+
+@keyframes flash-green {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(234, 179, 8, 0.3);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.flash-green {
+  animation: flash-green 0.5s ease-in-out;
+}
+
+@keyframes flash-red {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(239, 68, 68, 0.3);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.flash-red {
+  animation: flash-red 0.5s ease-in-out;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="time"] {
+  background: #1a1a1a;
+  border: 2px solid #2a2a2a;
+  color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  width: 100%;
+  font-size: 1rem;
+}
+
+input[type="text"]:focus,
+input[type="time"]:focus {
+  outline: none;
+  border-color: #eab308;
+  background: #1a1a1a;
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  width: 56px;
+  height: 28px;
+  background: #2a2a2a;
+  border-radius: 14px;
+  cursor: pointer;
+  border: 2px solid #3a3a3a;
+}
+
+.toggle-switch.active {
+  background: #eab308;
+  border-color: #eab308;
+}
+
+.toggle-switch-handle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  background: #000000;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle-switch.active .toggle-switch-handle {
+  transform: translateX(28px);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #eab308;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ca8a04;
+}
