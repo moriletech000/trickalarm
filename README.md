@@ -21,6 +21,9 @@ TrickAlarm is an innovative alarm clock application that uses AI-powered object 
 - 💾 **Offline Support** - Works completely offline, no API calls needed
 - 📱 **PWA Ready** - Install as a Progressive Web App on any device
 - 🎯 **20 Challenge Objects** - Random selection from cup, bottle, chair, laptop, and more
+- 📳 **Mobile Optimized** - Enhanced reliability on smartphones with wake lock, vibration, and background execution
+- 🔔 **Smart Notifications** - Rich notifications with action buttons and vibration patterns
+- 🔋 **Battery Efficient** - Optimized for mobile devices with intelligent power management
 
 ## 🚀 Quick Start
 
@@ -142,6 +145,36 @@ trickalarm/
 └── tailwind.config.js
 ```
 
+## 📱 Mobile Device Support
+
+TrickAlarm is optimized for mobile devices with several enhancements:
+
+### 🔋 Battery & Performance
+- **Wake Lock Support** - Keeps screen active during alarms
+- **Background Execution** - Continues running when app is backgrounded
+- **Battery Optimization** - Efficient 15-second check intervals
+- **Keep-Alive Mechanism** - Prevents browser from sleeping
+
+### 📳 Mobile Features
+- **Vibration Patterns** - Enhanced haptic feedback for alarms
+- **Rich Notifications** - Action buttons and persistent alerts
+- **PWA Installation** - Install as native app for better reliability
+- **Device-Specific Tips** - Guidance for iOS and Android optimization
+
+### 📋 Mobile Setup Recommendations
+
+#### For iOS Devices:
+- Add to Home Screen for better background support
+- Keep device plugged in for overnight alarms
+- Enable notifications in Settings
+- Don't force-close the app
+
+#### For Android Devices:
+- Disable battery optimization for TrickAlarm
+- Allow background activity in app settings
+- Add to "Never sleeping apps" list
+- Enable "Allow background activity"
+
 ## 🎯 Challenge Objects
 
 The app can detect 20 different objects:
@@ -223,6 +256,13 @@ const intervalId = setInterval(checkAlarms, 30000); // Check every 30 seconds
 - Check browser permissions for camera access
 - Try refreshing the page
 - Verify camera is not being used by another app
+
+### Alarm Not Working on Mobile
+- **Install as PWA** - Add to Home Screen for better reliability
+- **Check Notifications** - Ensure permission is granted in browser/device settings
+- **Disable Battery Optimization** - Android: Settings > Apps > TrickAlarm > Battery > Don't optimize
+- **Keep App Active** - Don't force-close the app, keep it in recent apps
+- **Test with Device Plugged In** - Eliminates aggressive power saving modes
 
 ### Object Not Detected
 - Ensure good lighting conditions
