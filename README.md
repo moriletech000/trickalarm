@@ -1,4 +1,4 @@
-# 🚨 TrickAlarm
+#  TrickAlarm
 
 > A smart alarm clock that can't be dismissed until you scan a real-world object with your camera
 
@@ -7,32 +7,32 @@
 [![TensorFlow.js](https://img.shields.io/badge/TensorFlow.js-AI-orange.svg)](https://www.tensorflow.org/js)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## 🎯 Overview
+##  Overview
 
 TrickAlarm is an innovative alarm clock application that uses AI-powered object detection to ensure you actually wake up. When your alarm goes off, the only way to dismiss it is to point your device camera at a randomly assigned object (like a cup, shoe, or book). No more hitting snooze while half-asleep!
 
-### ✨ Key Features
+###  Key Features
 
-- 🤖 **AI Object Detection** - Uses TensorFlow.js and COCO-SSD model for real-time object recognition
-- 📷 **Camera Integration** - Leverages device camera to verify objects
-- 🎨 **Modern UI** - Clean black and yellow design with smooth animations
-- 🔄 **Smart Scheduling** - Set alarms for specific days and times
-- 🔊 **Custom Sounds** - Choose from beep, buzz, or bell alarm sounds
-- 💾 **Offline Support** - Works completely offline, no API calls needed
-- 📱 **PWA Ready** - Install as a Progressive Web App on any device
-- 🎯 **20 Challenge Objects** - Random selection from cup, bottle, chair, laptop, and more
-- 📳 **Mobile Optimized** - Enhanced reliability on smartphones with wake lock, vibration, and background execution
-- 🔔 **Smart Notifications** - Rich notifications with action buttons and vibration patterns
-- 🔋 **Battery Efficient** - Optimized for mobile devices with intelligent power management
-- 🔒 **Tab Protection** - Multi-layer anti-close system prevents accidental alarm dismissal
-- 🖥️ **Kiosk Mode** - Fullscreen protection with guided setup for maximum reliability
-- 🔊 **Background Audio Persistence** - NEW! Alarms continue even when browser is closed
+-  **AI Object Detection** - Uses TensorFlow.js and COCO-SSD model for real-time object recognition
+-  **Camera Integration** - Leverages device camera to verify objects
+-  **Modern UI** - Clean black and yellow design with smooth animations
+-  **Smart Scheduling** - Set alarms for specific days and times
+-  **Custom Sounds** - Choose from beep, buzz, or bell alarm sounds
+-  **Offline Support** - Works completely offline, no API calls needed
+-  **PWA Ready** - Install as a Progressive Web App on any device
+-  **20 Challenge Objects** - Random selection from cup, bottle, chair, laptop, and more
+-  **Mobile Optimized** - Enhanced reliability on smartphones with wake lock, vibration, and background execution
+-  **Smart Notifications** - Rich notifications with action buttons and vibration patterns
+-  **Battery Efficient** - Optimized for mobile devices with intelligent power management
+-  **Tab Protection** - Multi-layer anti-close system prevents accidental alarm dismissal
+-  **Kiosk Mode** - Fullscreen protection with guided setup for maximum reliability
+-  **Background Audio Persistence** - NEW! Alarms continue even when browser is closed
 
-## 🆕 Latest Update: Background Audio Persistence
+##  Latest Update: Background Audio Persistence
 
-**🎉 Major Feature Added:** Alarms now continue ringing even when the browser or app is closed!
+** Major Feature Added:** Alarms now continue ringing even when the browser or app is closed!
 
-### 🔊 How It Works:
+###  How It Works:
 - **AudioWorklet Processing** - True background audio that survives tab switches
 - **Service Worker Audio** - Audio context in service worker for maximum persistence  
 - **Persistent Notifications** - Recurring notifications every 10 seconds during alarms
@@ -40,13 +40,13 @@ TrickAlarm is an innovative alarm clock application that uses AI-powered object 
 - **Cross-Browser Fallbacks** - Works on Chrome, Firefox, Safari with graceful degradation
 - **Mobile PWA Support** - Enhanced background execution when installed as app
 
-### 🎯 User Benefits:
+###  User Benefits:
 - **Reliable Wake-Up** - Can't accidentally dismiss alarms by closing browser
 - **Persistent Notifications** - Guides you back to alarm even if closed
 - **Mobile-Friendly** - Works with app backgrounding and task switching
 - **Cross-Platform** - Consistent experience across all devices and browsers
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 
@@ -82,7 +82,7 @@ npm run build
 npm run preview
 ```
 
-## 🎮 How to Use
+##  How to Use
 
 1. **Create an Alarm**
    - Click the yellow "+" button on the home screen
@@ -109,7 +109,7 @@ npm run preview
    - Click notifications to return to alarm page
    - Install as PWA for best background performance
 
-## 🏗️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **React 18** - UI framework
@@ -135,55 +135,55 @@ npm run preview
 - **Zustand** - Lightweight state management
 - **localStorage** - Persistent alarm storage
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 trickalarm/
-├── public/
-│   ├── alarm-worker.js       # Enhanced service worker with audio
-│   ├── icon-192.png          # PWA icon
-│   ├── icon-512.png          # PWA icon
-│   └── manifest.json         # PWA manifest
-├── src/
-│   ├── components/
-│   │   ├── AlarmCard.tsx     # Alarm list item component
-│   │   ├── LoadingScreen.tsx # AI model loading screen
-│   │   ├── KioskModeHelper.tsx # Kiosk mode instructions
-│   │   └── MobileAlarmTips.tsx # Mobile optimization tips
-│   ├── pages/
-│   │   ├── Home.tsx          # Main dashboard
-│   │   ├── SetAlarm.tsx      # Alarm creation/editing
-│   │   ├── AlarmFiring.tsx   # Alarm ringing screen
-│   │   └── Scanner.tsx       # Object detection screen
-│   ├── hooks/
-│   │   ├── useCamera.ts      # Camera access hook
-│   │   └── useSoundEngine.ts # Audio management hook
-│   ├── store/
-│   │   └── appStore.ts       # Zustand state management
-│   ├── utils/
-│   │   ├── alarmScheduler.ts      # Alarm timing logic
-│   │   ├── backgroundAudio.ts     # NEW! Background audio persistence
-│   │   ├── challengeObjects.ts    # Object definitions
-│   │   ├── mobileAlarmHelper.ts   # Mobile optimizations
-│   │   ├── objectDetection.ts     # AI detection logic
-│   │   ├── objectIcons.tsx        # Icon mappings
-│   │   ├── soundEngine.ts         # Enhanced Web Audio API wrapper
-│   │   └── tensorflowLoader.ts    # TF.js model loader
-│   ├── App.tsx               # Main app component
-│   ├── main.tsx             # Entry point
-│   └── index.css            # Global styles
-├── index.html
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-└── tailwind.config.js
+ public/
+    alarm-worker.js       # Enhanced service worker with audio
+    icon-192.png          # PWA icon
+    icon-512.png          # PWA icon
+    manifest.json         # PWA manifest
+ src/
+    components/
+       AlarmCard.tsx     # Alarm list item component
+       LoadingScreen.tsx # AI model loading screen
+       KioskModeHelper.tsx # Kiosk mode instructions
+       MobileAlarmTips.tsx # Mobile optimization tips
+    pages/
+       Home.tsx          # Main dashboard
+       SetAlarm.tsx      # Alarm creation/editing
+       AlarmFiring.tsx   # Alarm ringing screen
+       Scanner.tsx       # Object detection screen
+    hooks/
+       useCamera.ts      # Camera access hook
+       useSoundEngine.ts # Audio management hook
+    store/
+       appStore.ts       # Zustand state management
+    utils/
+       alarmScheduler.ts      # Alarm timing logic
+       backgroundAudio.ts     # NEW! Background audio persistence
+       challengeObjects.ts    # Object definitions
+       mobileAlarmHelper.ts   # Mobile optimizations
+       objectDetection.ts     # AI detection logic
+       objectIcons.tsx        # Icon mappings
+       soundEngine.ts         # Enhanced Web Audio API wrapper
+       tensorflowLoader.ts    # TF.js model loader
+    App.tsx               # Main app component
+    main.tsx             # Entry point
+    index.css            # Global styles
+ index.html
+ package.json
+ tsconfig.json
+ vite.config.ts
+ tailwind.config.js
 ```
 
-## 🔒 Tab Protection & Anti-Close System
+##  Tab Protection & Anti-Close System
 
 TrickAlarm includes advanced protection to prevent accidental alarm dismissal:
 
-### 🛡️ Protection Layers
+###  Protection Layers
 - **Browser Dialog Warnings** - Confirmation prompts when trying to close tab
 - **Keyboard Shortcut Blocking** - Prevents Ctrl+W, Alt+F4, F5, and other close shortcuts
 - **Navigation Prevention** - Blocks back button and URL changes during alarms
@@ -192,36 +192,36 @@ TrickAlarm includes advanced protection to prevent accidental alarm dismissal:
 - **Visual Warning System** - Pulsing red borders and warning banners
 - **Background Audio Persistence** - NEW! Audio continues even when browser closed
 
-### 📱 Kiosk Mode Support
+###  Kiosk Mode Support
 - **Guided Setup** - Step-by-step instructions for device-level app locking
 - **iOS Guided Access** - Instructions for Settings → Accessibility → Guided Access
 - **Android Screen Pinning** - Guidance for enabling kiosk mode
 - **PWA Benefits** - Enhanced protection when installed as app
 
-### 🎯 Effectiveness
+###  Effectiveness
 - **99%+ Prevention** of accidental closures with background audio
 - **Cross-Browser Support** - Works on Chrome, Firefox, Safari, Edge
 - **Mobile Optimized** - Special handling for touch devices
 - **Recovery Mechanisms** - Service worker restoration for edge cases
 
-## 📱 Mobile Device Support
+##  Mobile Device Support
 
 TrickAlarm is optimized for mobile devices with several enhancements:
 
-### 🔋 Battery & Performance
+###  Battery & Performance
 - **Wake Lock Support** - Keeps screen active during alarms
 - **Background Execution** - Continues running when app is backgrounded
 - **Battery Optimization** - Efficient 15-second check intervals
 - **Keep-Alive Mechanism** - Prevents browser from sleeping
 - **Background Audio** - NEW! Audio persistence even when app closed
 
-### 📳 Mobile Features
+###  Mobile Features
 - **Vibration Patterns** - Enhanced haptic feedback for alarms
 - **Rich Notifications** - Action buttons and persistent alerts
 - **PWA Installation** - Install as native app for better reliability
 - **Device-Specific Tips** - Guidance for iOS and Android optimization
 
-### 📋 Mobile Setup Recommendations
+###  Mobile Setup Recommendations
 
 #### For iOS Devices:
 - Add to Home Screen for better background support
@@ -237,32 +237,32 @@ TrickAlarm is optimized for mobile devices with several enhancements:
 - Enable "Allow background activity"
 - Grant microphone and notification permissions
 
-## 🎯 Challenge Objects
+##  Challenge Objects
 
 The app can detect 20 different objects:
 
-- ☕ Cup
-- 🍾 Bottle
-- 🪑 Chair
-- 💻 Laptop
-- ⌨️ Keyboard
-- 🖱️ Mouse
-- 📖 Book
-- 🎒 Backpack
-- 📱 Cell Phone
-- 📺 Remote
+-  Cup
+-  Bottle
+-  Chair
+-  Laptop
+- ⌨ Keyboard
+-  Mouse
+-  Book
+-  Backpack
+-  Cell Phone
+-  Remote
 - ⏰ Clock
-- ✂️ Scissors
-- 🪥 Toothbrush
-- 🥄 Spoon
-- 🍴 Fork
-- 🥣 Bowl
-- ☂️ Umbrella
-- 👜 Handbag
-- 🧳 Suitcase
-- 👟 Shoe
+-  Scissors
+-  Toothbrush
+-  Spoon
+-  Fork
+-  Bowl
+-  Umbrella
+-  Handbag
+-  Suitcase
+-  Shoe
 
-## 🔧 Configuration
+##  Configuration
 
 ### Camera Settings
 The app uses the rear camera by default. To change camera preferences, modify `src/pages/Scanner.tsx`:
@@ -302,12 +302,12 @@ this.keepAliveInterval = window.setInterval(() => {
 }, 500); // Every 500ms during alarm
 ```
 
-## 🌐 Browser Compatibility
+##  Browser Compatibility
 
-- ✅ Chrome 90+ (Full support including AudioWorklet)
-- ✅ Firefox 88+ (Full support with minor worklet limitations)
-- ✅ Safari 14+ (Partial support with fallbacks)
-- ✅ Edge 90+ (Full support including AudioWorklet)
+-  Chrome 90+ (Full support including AudioWorklet)
+-  Firefox 88+ (Full support with minor worklet limitations)
+-  Safari 14+ (Partial support with fallbacks)
+-  Edge 90+ (Full support including AudioWorklet)
 
 **Requirements:**
 - Camera access permission
@@ -317,7 +317,7 @@ this.keepAliveInterval = window.setInterval(() => {
 - JavaScript enabled
 - Modern browser with WebGL support
 
-## 🔒 Privacy & Security
+##  Privacy & Security
 
 - **No Data Collection** - All processing happens locally on your device
 - **No Backend** - No data is sent to any server
@@ -326,7 +326,7 @@ this.keepAliveInterval = window.setInterval(() => {
 - **Offline First** - Works completely offline after initial load
 - **Local Storage Only** - All data stored locally on your device
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Camera Not Working
 - Ensure you're using HTTPS (or localhost)
@@ -375,7 +375,7 @@ this.keepAliveInterval = window.setInterval(() => {
 - Subsequent loads use cached model
 - Use "Skip and Continue" if model fails to load
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -385,21 +385,21 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - [TensorFlow.js](https://www.tensorflow.org/js) - Machine learning framework
 - [COCO-SSD](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd) - Object detection model
 - [Lucide Icons](https://lucide.dev/) - Beautiful icon library
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 
-## 📧 Contact
+##  Contact
 
 Project Link: [https://github.com/moriletech000/trickalarm](https://github.com/moriletech000/trickalarm)
 
 ---
 
-Made with ☕ and 💻 to help you wake up on time!
+Made with  and  to help you wake up on time!
